@@ -8,13 +8,33 @@ package sistemkehadiran;
  *
  * @author itsupport
  */
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class SistemKehadiran {
 
-    /**
-     * @param args the command line arguments
-     */
+    public static Connection getConnection() {
+        Connection conn = null;
+        String url = "jdbc:mysql://localhost:3306/sistem_kehadiran";
+        String user = "root";
+        String password = "";
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return conn;
+    }
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+        // TODO code application logic 
+        try {
+            Connection c = SistemKehadiran.getConnection();
+            System.out.println(String.format("Connected to database %s " + "successfully.", c.getCatalog()));
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
     
 }
