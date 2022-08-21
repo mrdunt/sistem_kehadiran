@@ -5,10 +5,12 @@
 package sistemkehadiran;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -43,6 +45,9 @@ public class FormPenilaian extends javax.swing.JFrame {
         // Disable input for Nama karyawan, Jabatan, and Text tanggal
         textNamaKaryawan.disable();
         textJabatan.disable();
+        textTanggalKehadiran.disable();
+        textRata.disable();
+        textKeterangan.disable();
         Connection conn = SistemKehadiran.getConnection();
         //menampilkan data database kedalam tabel
        try {
@@ -75,9 +80,69 @@ public class FormPenilaian extends javax.swing.JFrame {
         }
     }
     
+    void load_comboKaryawan(){
+        Connection conn = SistemKehadiran.getConnection();        
+        try {
+            java.sql.Statement stmt = conn.createStatement();
+            SQL = "SELECT id, nama, jabatan from karyawan;";
+            java.sql.ResultSet res = stmt.executeQuery(SQL);
+            while (res.next()) {
+                comboKaryawan.addItem("KAR-" + res.getString(1));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    void load_comboKehadiran(){
+        Connection conn = SistemKehadiran.getConnection();        
+        try {
+            java.sql.Statement stmt = conn.createStatement();
+            SQL = "SELECT id, tgl_kehadiran from kehadiran;";
+            java.sql.ResultSet res = stmt.executeQuery(SQL);
+            while (res.next()) {
+                comboKehadiran.addItem("HDR-" + res.getString(1));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    String errorInput(){
+
+        if (textKemampuanKerja.getText().equals("")){
+            return "Text Kemampuan Kerja tidak boleh kosong !";
+        }else if(textLoyalitas.getText().equals("")){
+            return "Text Loyalitas tidak boleh kosong !";
+        }else if(textDisiplin.getText().equals("")){
+            return "Text Disiplin tidak boleh kosong !";
+        }else if(textPrestasi.getText().equals("")){
+            return "Text Prestasi tidak boleh kosong !";
+        }else if(textPerilaku.getText().equals("")){
+            return "Text Perilaku tidak boleh kosong !";
+        }else if(textRata.getText().equals("")){
+            return "Text Rata Rata tidak boleh kosong !";
+        }else if(textKeterangan.getText().equals("")){
+            return "Text Keterangan tidak boleh kosong !";
+        }
+        return null;
+    }
+    
+    void clearInput(){
+        textKemampuanKerja.setText("");
+        textLoyalitas.setText("");
+        textDisiplin.setText("");
+        textPrestasi.setText("");
+        textPerilaku.setText("");
+        textRata.setText("");
+        textKeterangan.setText("");
+    }
+    
     public FormPenilaian() {
         initComponents();
         this.load_table();
+        load_comboKaryawan();
+        load_comboKehadiran();
     }
 
     /**
@@ -191,6 +256,11 @@ public class FormPenilaian extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablePenilaian.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablePenilaianMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tablePenilaian);
 
         jLabel8.setText("Cari karyawan");
@@ -299,6 +369,18 @@ public class FormPenilaian extends javax.swing.JFrame {
         buttonBatal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonBatalActionPerformed(evt);
+            }
+        });
+
+        comboKehadiran.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboKehadiranActionPerformed(evt);
+            }
+        });
+
+        comboKaryawan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboKaryawanActionPerformed(evt);
             }
         });
 
@@ -510,6 +592,19 @@ public class FormPenilaian extends javax.swing.JFrame {
 
     private void buttonHitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonHitungActionPerformed
         // TODO add your handling code here:
+        try{
+            float rata = (Integer.parseInt(textKemampuanKerja.getText()) + Integer.parseInt(textLoyalitas.getText()) + 
+                Integer.parseInt(textDisiplin.getText()) + Integer.parseInt(textPrestasi.getText()) + 
+                Integer.parseInt(textPerilaku.getText())) / 5  ;
+            textRata.setText(Float.toString(rata));
+            if (rata>=80){
+                textKeterangan.setText("Perpanjang");
+            }else{
+                textKeterangan.setText("Tidak Perpanjang");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(rootPane, e);
+        }
     }//GEN-LAST:event_buttonHitungActionPerformed
 
     private void textRataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRataActionPerformed
@@ -522,6 +617,34 @@ public class FormPenilaian extends javax.swing.JFrame {
 
     private void buttonSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSimpanActionPerformed
         // TODO add your handling code here:
+        if (errorInput() != null){
+            JOptionPane.showMessageDialog(null, errorInput(), "Pesan", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            try {
+                Connection conn = SistemKehadiran.getConnection();
+                String[] splitted_id_karyawan = comboKaryawan.getSelectedItem().toString().split("-");
+                int id_karyawan = Integer.parseInt(splitted_id_karyawan[1]);
+                String[] splitted_id_kehadiran = comboKehadiran.getSelectedItem().toString().split("-");
+                int id_kehadiran = Integer.parseInt(splitted_id_kehadiran[1]);
+                PreparedStatement stmt = conn.prepareStatement("insert into penilaian(id_karyawan, id_kehadiran, kemampuan, loyalitas, disiplin, "
+                        + "prestasi, perilaku, rata_rata, keterangan) values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                stmt.setInt(1, id_karyawan);
+                stmt.setInt(2, id_kehadiran);
+                stmt.setString(3, textKemampuanKerja.getText());
+                stmt.setString(4, textLoyalitas.getText());
+                stmt.setString(5, textDisiplin.getText());
+                stmt.setString(6, textPrestasi.getText());
+                stmt.setString(7, textPerilaku.getText());
+                stmt.setFloat(8, Float.parseFloat(textRata.getText()));
+                stmt.setString(9, textKeterangan.getText().toLowerCase());
+                stmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Data berhasil disimpan", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                load_table();
+                clearInput();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }//GEN-LAST:event_buttonSimpanActionPerformed
 
     private void buttonUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUbahActionPerformed
@@ -535,6 +658,61 @@ public class FormPenilaian extends javax.swing.JFrame {
     private void buttonBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBatalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_buttonBatalActionPerformed
+
+    private void comboKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboKaryawanActionPerformed
+        // TODO add your handling code here:
+        Connection conn = SistemKehadiran.getConnection();        
+        try {
+            java.sql.Statement stmt = conn.createStatement();
+            String[] splitted_id_karyawan = comboKaryawan.getSelectedItem().toString().split("-");
+            int id = Integer.parseInt(splitted_id_karyawan[1]);
+            SQL = "SELECT nama, jabatan from karyawan where id='" + id + "' ";
+            java.sql.ResultSet res = stmt.executeQuery(SQL);
+            while (res.next()) {
+                textNamaKaryawan.setText(res.getString(1));
+                textJabatan.setText(res.getString(2));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_comboKaryawanActionPerformed
+
+    private void comboKehadiranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboKehadiranActionPerformed
+        // TODO add your handling code here:
+        Connection conn = SistemKehadiran.getConnection();        
+        try {
+            java.sql.Statement stmt = conn.createStatement();
+            String[] splitted_id_kehadiran = comboKehadiran.getSelectedItem().toString().split("-");
+            int id = Integer.parseInt(splitted_id_kehadiran[1]);
+            SQL = "SELECT tgl_kehadiran from kehadiran where id='" + id + "' ";
+            java.sql.ResultSet res = stmt.executeQuery(SQL);
+            while (res.next()) {
+                textTanggalKehadiran.setText(res.getString(1));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_comboKehadiranActionPerformed
+
+    private void tablePenilaianMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePenilaianMouseClicked
+        // TODO add your handling code here:
+        buttonSimpan.setEnabled(false);
+        int baris = tablePenilaian.getSelectedRow();
+        comboKaryawan.setSelectedItem(tablePenilaian.getValueAt(baris, 2).toString());
+        textNamaKaryawan.setText(tablePenilaian.getValueAt(baris, 3).toString());
+        textJabatan.setText(tablePenilaian.getValueAt(baris, 4).toString());
+        comboKehadiran.setSelectedItem(tablePenilaian.getValueAt(baris, 5).toString());
+        textTanggalKehadiran.setText(tablePenilaian.getValueAt(baris, 6).toString());
+        textKemampuanKerja.setText(tablePenilaian.getValueAt(baris, 7).toString());
+        textLoyalitas.setText(tablePenilaian.getValueAt(baris, 8).toString());
+        textDisiplin.setText(tablePenilaian.getValueAt(baris, 9).toString());
+        textPrestasi.setText(tablePenilaian.getValueAt(baris, 10).toString());
+        textPerilaku.setText(tablePenilaian.getValueAt(baris, 11).toString());
+        textRata.setText(tablePenilaian.getValueAt(baris, 12).toString());
+        textKeterangan.setText(tablePenilaian.getValueAt(baris, 13).toString());
+
+
+    }//GEN-LAST:event_tablePenilaianMouseClicked
 
     /**
      * @param args the command line arguments
