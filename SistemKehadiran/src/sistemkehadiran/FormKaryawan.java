@@ -429,7 +429,7 @@ public class FormKaryawan extends javax.swing.JFrame {
                     PreparedStatement stmt = conn.prepareStatement("delete from karyawan where id=?");
                     stmt.setInt(1, id);
                     stmt.executeUpdate();
-                    JOptionPane.showMessageDialog(null, "Data berhasil diubah", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
                     load_table();
                     clearInput();
                 }
