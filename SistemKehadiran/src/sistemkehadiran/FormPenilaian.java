@@ -23,7 +23,7 @@ public class FormPenilaian extends javax.swing.JFrame {
      * Creates new form FormPenilaian
      */
     
-        private String SQL;
+    private String SQL;
     private void load_table(){
         // membuat tampilan model tabel
         DefaultTableModel model = new DefaultTableModel();
@@ -192,7 +192,7 @@ public class FormPenilaian extends javax.swing.JFrame {
         comboKehadiran = new javax.swing.JComboBox<>();
         comboKaryawan = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 153));
 
@@ -395,7 +395,6 @@ public class FormPenilaian extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(buttonSimpan)
                                 .addGap(18, 18, 18)
                                 .addComponent(buttonUbah)
@@ -403,7 +402,7 @@ public class FormPenilaian extends javax.swing.JFrame {
                                 .addComponent(buttonHapus)
                                 .addGap(18, 18, 18)
                                 .addComponent(buttonBatal)
-                                .addGap(69, 69, 69)
+                                .addGap(83, 83, 83)
                                 .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
                                 .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -526,9 +525,10 @@ public class FormPenilaian extends javax.swing.JFrame {
                     .addComponent(jLabel7)
                     .addComponent(textJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel8)
+                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(buttonSimpan)
                         .addComponent(buttonUbah)
@@ -642,21 +642,76 @@ public class FormPenilaian extends javax.swing.JFrame {
                 load_table();
                 clearInput();
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_buttonSimpanActionPerformed
 
     private void buttonUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUbahActionPerformed
         // TODO add your handling code here:
+        if (errorInput() != null){
+            JOptionPane.showMessageDialog(null, errorInput(), "Pesan", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            try {
+                Connection conn = SistemKehadiran.getConnection();
+                String[] splitted_id_karyawan = comboKaryawan.getSelectedItem().toString().split("-");
+                int id_karyawan = Integer.parseInt(splitted_id_karyawan[1]);
+                String[] splitted_id_kehadiran = comboKehadiran.getSelectedItem().toString().split("-");
+                int id_kehadiran = Integer.parseInt(splitted_id_kehadiran[1]);
+                int baris = tablePenilaian.getSelectedRow();
+                String[] splitted_id_penilaian = tablePenilaian.getValueAt(baris, 1).toString().split("-");
+                int id_penilaian = Integer.parseInt(splitted_id_penilaian[1]);
+                PreparedStatement stmt = conn.prepareStatement("update penilaian set id_kehadiran=?, id_karyawan=?, kemampuan=?, loyalitas=?, disiplin=?, prestasi=?, perilaku=?, rata_rata=?, keterangan=? where id=?");
+                stmt.setInt(1, id_kehadiran);
+                stmt.setInt(2, id_karyawan);
+                stmt.setInt(3, Integer.parseInt(textKemampuanKerja.getText()));
+                stmt.setInt(4, Integer.parseInt(textLoyalitas.getText()));
+                stmt.setInt(5, Integer.parseInt(textDisiplin.getText()));
+                stmt.setInt(6, Integer.parseInt(textPrestasi.getText()));
+                stmt.setInt(7, Integer.parseInt(textPerilaku.getText()));
+                stmt.setFloat(8, Float.parseFloat(textRata.getText()));
+                stmt.setString(9, textKeterangan.getText());
+                stmt.setInt(10, id_penilaian);
+                stmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Data berhasil diupdate", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                load_table();
+                clearInput();
+                buttonSimpan.setEnabled(true);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_buttonUbahActionPerformed
 
     private void buttonHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonHapusActionPerformed
         // TODO add your handling code here:
+        if (errorInput() != null){
+            JOptionPane.showMessageDialog(null, errorInput(), "Pesan", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            try {
+                int baris = tablePenilaian.getSelectedRow();
+                String[] splitted_id_penilaian = tablePenilaian.getValueAt(baris, 1).toString().split("-");
+                int id = Integer.parseInt(splitted_id_penilaian[1]);
+                Connection conn = SistemKehadiran.getConnection();
+                int confirm = JOptionPane.showConfirmDialog(null, "Apakah anda yakin ingin menghapus data tersebut?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (confirm == 0){
+                    PreparedStatement stmt = conn.prepareStatement("delete from penilaian where id=?");
+                    stmt.setInt(1, id);
+                    stmt.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                    load_table();
+                    clearInput();
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_buttonHapusActionPerformed
 
     private void buttonBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBatalActionPerformed
         // TODO add your handling code here:
+        clearInput();
+        buttonSimpan.setEnabled(true);
     }//GEN-LAST:event_buttonBatalActionPerformed
 
     private void comboKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboKaryawanActionPerformed

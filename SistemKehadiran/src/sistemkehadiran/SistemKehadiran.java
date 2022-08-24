@@ -11,6 +11,7 @@ package sistemkehadiran;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 public class SistemKehadiran {
 
@@ -32,8 +33,10 @@ public class SistemKehadiran {
         try {
             Connection c = SistemKehadiran.getConnection();
             System.out.println(String.format("Connected to database %s " + "successfully.", c.getCatalog()));
+            new FormLogin().setVisible(true);
+            
         } catch (SQLException e) {
-            System.out.println(e);
+            JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
         }
     }
     

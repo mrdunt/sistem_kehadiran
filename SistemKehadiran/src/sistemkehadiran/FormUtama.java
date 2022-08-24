@@ -31,10 +31,10 @@ public class FormUtama extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        buttonFormKaryawan = new javax.swing.JButton();
+        buttonFormKehadiran = new javax.swing.JButton();
+        buttonFormPerpanjangan = new javax.swing.JButton();
+        buttonFormPenilaian = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -52,18 +52,33 @@ public class FormUtama extends javax.swing.JFrame {
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/checklist (1).png"))); // NOI18N
 
-        jButton1.setText("Data Karyawan");
-
-        jButton2.setText("Data Kehadiran");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonFormKaryawan.setText("Data Karyawan");
+        buttonFormKaryawan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                buttonFormKaryawanActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Data Perpanjangan");
+        buttonFormKehadiran.setText("Data Kehadiran");
+        buttonFormKehadiran.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonFormKehadiranActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Data Penilaian");
+        buttonFormPerpanjangan.setText("Data Perpanjangan");
+        buttonFormPerpanjangan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonFormPerpanjanganActionPerformed(evt);
+            }
+        });
+
+        buttonFormPenilaian.setText("Data Penilaian");
+        buttonFormPenilaian.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonFormPenilaianActionPerformed(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(102, 204, 255));
 
@@ -105,9 +120,9 @@ public class FormUtama extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(77, 77, 77)
-                        .addComponent(jButton3)
+                        .addComponent(buttonFormPerpanjangan)
                         .addGap(206, 206, 206)
-                        .addComponent(jButton4))
+                        .addComponent(buttonFormPenilaian))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(58, 58, 58)
                         .addComponent(jLabel1)
@@ -121,9 +136,9 @@ public class FormUtama extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel2))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(buttonFormKaryawan)
                                 .addGap(240, 240, 240)
-                                .addComponent(jButton2)))))
+                                .addComponent(buttonFormKehadiran)))))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -136,16 +151,16 @@ public class FormUtama extends javax.swing.JFrame {
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(buttonFormKaryawan)
+                    .addComponent(buttonFormKehadiran))
                 .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(buttonFormPerpanjangan)
+                    .addComponent(buttonFormPenilaian))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -163,9 +178,25 @@ public class FormUtama extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void buttonFormKehadiranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonFormKehadiranActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        new FormKehadiran().setVisible(true);
+    }//GEN-LAST:event_buttonFormKehadiranActionPerformed
+
+    private void buttonFormKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonFormKaryawanActionPerformed
+        // TODO add your handling code here:
+        new FormKaryawan().setVisible(true);
+    }//GEN-LAST:event_buttonFormKaryawanActionPerformed
+
+    private void buttonFormPerpanjanganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonFormPerpanjanganActionPerformed
+        // TODO add your handling code here:
+        new FormPerpanjangan().setVisible(true);
+    }//GEN-LAST:event_buttonFormPerpanjanganActionPerformed
+
+    private void buttonFormPenilaianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonFormPenilaianActionPerformed
+        // TODO add your handling code here:
+        new FormPenilaian().setVisible(true);
+    }//GEN-LAST:event_buttonFormPenilaianActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,10 +234,10 @@ public class FormUtama extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton buttonFormKaryawan;
+    private javax.swing.JButton buttonFormKehadiran;
+    private javax.swing.JButton buttonFormPenilaian;
+    private javax.swing.JButton buttonFormPerpanjangan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

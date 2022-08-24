@@ -140,7 +140,7 @@ public class FormKehadiran extends javax.swing.JFrame {
         buttonBatal = new javax.swing.JButton();
         comboKaryawan = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 153));
 
@@ -395,7 +395,7 @@ public class FormKehadiran extends javax.swing.JFrame {
                 load_table();
                 clearInput();
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_buttonSimpanActionPerformed
@@ -412,7 +412,6 @@ public class FormKehadiran extends javax.swing.JFrame {
                 int baris = tableKehadiran.getSelectedRow();
                 String[] splitted_id_kehadiran = tableKehadiran.getValueAt(baris, 1).toString().split("-");
                 int id_kehadiran = Integer.parseInt(splitted_id_kehadiran[1]);
-                System.out.print(id_kehadiran);
                 PreparedStatement stmt = conn.prepareStatement("update kehadiran set id_karyawan=?, keterangan=? where id=?");
                 stmt.setInt(1, id_karyawan);
                 stmt.setString(2, comboKeterangan.getSelectedItem().toString());
@@ -423,7 +422,7 @@ public class FormKehadiran extends javax.swing.JFrame {
                 clearInput();
                 buttonSimpan.setEnabled(true);
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_buttonUbahActionPerformed
@@ -448,7 +447,7 @@ public class FormKehadiran extends javax.swing.JFrame {
                     clearInput();
                 }
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed

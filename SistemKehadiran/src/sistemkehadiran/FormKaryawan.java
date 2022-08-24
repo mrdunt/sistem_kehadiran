@@ -112,7 +112,7 @@ public class FormKaryawan extends javax.swing.JFrame {
         buttonBatal = new javax.swing.JButton();
         comboJenisKelamin = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 153));
 
@@ -309,9 +309,7 @@ public class FormKaryawan extends javax.swing.JFrame {
                             .addComponent(textNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(40, 40, 40))
+                            .addComponent(jLabel7)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -341,7 +339,7 @@ public class FormKaryawan extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -380,7 +378,7 @@ public class FormKaryawan extends javax.swing.JFrame {
                 load_table();
                 clearInput();
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_buttonSimpanActionPerformed
@@ -409,7 +407,7 @@ public class FormKaryawan extends javax.swing.JFrame {
                 load_table();
                 clearInput();
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_buttonUbahActionPerformed
@@ -434,7 +432,7 @@ public class FormKaryawan extends javax.swing.JFrame {
                     clearInput();
                 }
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_buttonHapusActionPerformed

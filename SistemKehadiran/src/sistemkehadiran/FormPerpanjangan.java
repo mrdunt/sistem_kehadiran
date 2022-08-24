@@ -4,6 +4,15 @@
  */
 package sistemkehadiran;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author itsupport
@@ -13,8 +22,100 @@ public class FormPerpanjangan extends javax.swing.JFrame {
     /**
      * Creates new form FormPerpanjangan
      */
+    
+    private String SQL;
+    private void load_table(){
+        // membuat tampilan model tabel
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("Id Perpanjangan");
+        model.addColumn("Id Penilaian");
+        model.addColumn("Nama Karyawan");
+        model.addColumn("Jabatan");
+        model.addColumn("Rata Rata");
+        model.addColumn("Keterangan");
+        model.addColumn("Tanggal Perpanjangan");
+        model.addColumn("Tanggal Masuk Kerja");
+        model.addColumn("Tanggal Selesai");
+        model.addColumn("Gaji");
+        tablePerpanjangan.setModel(model);
+        // Disable input for Nama karyawan, Jabatan, and Text tanggal
+        textNamaKaryawan.disable();
+        textJabatan.disable();
+        textRataRata.disable();
+        textKeterangan.disable();
+        Connection conn = SistemKehadiran.getConnection();
+        //menampilkan data database kedalam tabel
+       try {
+            java.sql.Statement stmt = conn.createStatement();
+            SQL = "select perpanjangan.id, perpanjangan.id_penilaian, karyawan.nama, karyawan.jabatan, penilaian.rata_rata, penilaian.keterangan, "
+                    + "perpanjangan.tgl_perpanjangan, perpanjangan.tgl_kerja, perpanjangan.tgl_selesai, perpanjangan.gaji "
+                    + "from perpanjangan INNER join penilaian on perpanjangan.id_penilaian = penilaian.id INNER join karyawan on penilaian.id_karyawan = karyawan.id;";
+            java.sql.ResultSet res = stmt.executeQuery(SQL);
+            int no=1;
+            while (res.next()) {
+                model.addRow(new Object[]{
+                    no++,
+                    "PRPJ-" + res.getString(1),
+                    "PEN-" + res.getString(2),
+                    res.getString(3),
+                    res.getString(4),
+                    res.getString(5),
+                    res.getString(6),
+                    res.getString(7),
+                    res.getString(8),
+                    res.getString(9),
+                    res.getString(10),
+                });
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    void load_comboPenilaian(){
+        Connection conn = SistemKehadiran.getConnection();        
+        try {
+            java.sql.Statement stmt = conn.createStatement();
+            SQL = "SELECT id from penilaian;";
+            java.sql.ResultSet res = stmt.executeQuery(SQL);
+            while (res.next()) {
+                comboPenilaian.addItem("PEN-" + res.getString(1));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    String errorInput(){
+        if (textTanggalPerpanjangan.getText().equals("")){
+            return "Text Tanggal Perpanjangan tidak boleh kosong !";
+        }else if(textTanggalMasukKerja.getText().equals("")){
+            return "Text Tanggal Masuk Kerja tidak boleh kosong !";
+        }else if(textTanggalSelesai.getText().equals("")){
+            return "Text Tanggal Selesai tidak boleh kosong !";
+        }else if(textGaji.getText().equals("")){
+            return "Text Gaji tidak boleh kosong !";
+        }
+        return null;
+    }
+    
+    void clearInput(){
+        textTanggalMasukKerja.setText("");
+        textTanggalPerpanjangan.setText("");
+        textTanggalSelesai.setText("");
+        textGaji.setText("");
+        textNamaKaryawan.setText("");
+        textJabatan.setText("");
+        textKeterangan.setText("");
+        textRataRata.setText("");
+    }
+    
     public FormPerpanjangan() {
         initComponents();
+        load_table();
+        load_comboPenilaian();
+
     }
 
     /**
@@ -33,31 +134,31 @@ public class FormPerpanjangan extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        textJabatan = new javax.swing.JTextField();
+        buttonSimpan = new javax.swing.JButton();
+        buttonUbah = new javax.swing.JButton();
+        buttonHapus = new javax.swing.JButton();
+        buttonBatal = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablePerpanjangan = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        textNamaKaryawan = new javax.swing.JTextField();
+        textRataRata = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        textTanggalPerpanjangan = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
+        textTanggalMasukKerja = new javax.swing.JTextField();
+        textTanggalSelesai = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        jTextField10 = new javax.swing.JTextField();
+        textGaji = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jTextField13 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        textKeterangan = new javax.swing.JTextField();
+        comboPenilaian = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 153));
 
@@ -100,45 +201,45 @@ public class FormPerpanjangan extends javax.swing.JFrame {
 
         jLabel6.setText("Jabatan");
 
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        textJabatan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                textJabatanActionPerformed(evt);
             }
         });
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/plus.png"))); // NOI18N
-        jButton1.setText("Simpan");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/plus.png"))); // NOI18N
+        buttonSimpan.setText("Simpan");
+        buttonSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                buttonSimpanActionPerformed(evt);
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/edit.png"))); // NOI18N
-        jButton2.setText("Ubah");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/edit.png"))); // NOI18N
+        buttonUbah.setText("Ubah");
+        buttonUbah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                buttonUbahActionPerformed(evt);
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/trash.png"))); // NOI18N
-        jButton3.setText("Hapus");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        buttonHapus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/trash.png"))); // NOI18N
+        buttonHapus.setText("Hapus");
+        buttonHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                buttonHapusActionPerformed(evt);
             }
         });
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/close.png"))); // NOI18N
-        jButton4.setText("Batal");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        buttonBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/close.png"))); // NOI18N
+        buttonBatal.setText("Batal");
+        buttonBatal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                buttonBatalActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablePerpanjangan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -149,7 +250,12 @@ public class FormPerpanjangan extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        tablePerpanjangan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablePerpanjanganMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tablePerpanjangan);
 
         jLabel8.setText("Cari karyawan");
 
@@ -159,45 +265,45 @@ public class FormPerpanjangan extends javax.swing.JFrame {
             }
         });
 
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        textNamaKaryawan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                textNamaKaryawanActionPerformed(evt);
             }
         });
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        textRataRata.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                textRataRataActionPerformed(evt);
             }
         });
 
         jLabel11.setText("Tanggal Perpanjang");
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        textTanggalPerpanjangan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                textTanggalPerpanjanganActionPerformed(evt);
             }
         });
 
         jLabel12.setText("Tanggal Masuk Kerja");
 
-        jTextField8.addActionListener(new java.awt.event.ActionListener() {
+        textTanggalMasukKerja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField8ActionPerformed(evt);
+                textTanggalMasukKerjaActionPerformed(evt);
             }
         });
 
-        jTextField9.addActionListener(new java.awt.event.ActionListener() {
+        textTanggalSelesai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField9ActionPerformed(evt);
+                textTanggalSelesaiActionPerformed(evt);
             }
         });
 
         jLabel13.setText("Tanggal Selesai ");
 
-        jTextField10.addActionListener(new java.awt.event.ActionListener() {
+        textGaji.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField10ActionPerformed(evt);
+                textGajiActionPerformed(evt);
             }
         });
 
@@ -207,13 +313,22 @@ public class FormPerpanjangan extends javax.swing.JFrame {
 
         jLabel17.setText("Keterangan");
 
-        jTextField13.addActionListener(new java.awt.event.ActionListener() {
+        textKeterangan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField13ActionPerformed(evt);
+                textKeteranganActionPerformed(evt);
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboPenilaian.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comboPenilaianMouseClicked(evt);
+            }
+        });
+        comboPenilaian.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboPenilaianActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -226,13 +341,13 @@ public class FormPerpanjangan extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(buttonSimpan)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2)
+                                .addComponent(buttonUbah)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton3)
+                                .addComponent(buttonHapus)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton4)
+                                .addComponent(buttonBatal)
                                 .addGap(37, 37, 37)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -242,42 +357,42 @@ public class FormPerpanjangan extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel17)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                                .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                                .addComponent(textKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel16)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(textRataRata, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(textJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel2))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(textNamaKaryawan, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                                    .addComponent(comboPenilaian, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(143, 143, 143)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel11)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(textTanggalPerpanjangan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(textTanggalMasukKerja, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel13)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(textTanggalSelesai, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel14)
                                 .addGap(104, 104, 104)
-                                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(textGaji, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(49, 49, 49))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -288,38 +403,38 @@ public class FormPerpanjangan extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(comboPenilaian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(textNamaKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(textJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel16)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(textRataRata, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel17)
-                            .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(textKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(textTanggalPerpanjangan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel12)
-                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(textTanggalMasukKerja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel13)
-                            .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(textTanggalSelesai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(15, 15, 15)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(textGaji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel14))))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -331,10 +446,10 @@ public class FormPerpanjangan extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3)
-                            .addComponent(jButton4))
+                            .addComponent(buttonSimpan)
+                            .addComponent(buttonUbah)
+                            .addComponent(buttonHapus)
+                            .addComponent(buttonBatal))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -359,57 +474,170 @@ public class FormPerpanjangan extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void textJabatanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textJabatanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_textJabatanActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void buttonSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSimpanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        if (errorInput() != null){
+            JOptionPane.showMessageDialog(null, errorInput(), "Pesan", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            try {
+                Connection conn = SistemKehadiran.getConnection();
+                String[] splitted_id_penilaian = comboPenilaian.getSelectedItem().toString().split("-");
+                int id_penilaian = Integer.parseInt(splitted_id_penilaian[1]);
+                PreparedStatement stmt = conn.prepareStatement("insert into perpanjangan(id_penilaian, tgl_perpanjangan, "
+                        + "tgl_kerja, tgl_selesai, gaji) values(?, ?, ?, ?, ?)");
+                stmt.setInt(1, id_penilaian);
+                stmt.setString(2, textTanggalPerpanjangan.getText());
+                stmt.setString(3, textTanggalMasukKerja.getText());
+                stmt.setString(4, textTanggalSelesai.getText());
+                stmt.setFloat(5, Float.parseFloat(textGaji.getText()));
+                stmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Data berhasil disimpan", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                load_table();
+                clearInput();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_buttonSimpanActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void buttonUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUbahActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        if (errorInput() != null){
+            JOptionPane.showMessageDialog(null, errorInput(), "Pesan", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            try {
+                Connection conn = SistemKehadiran.getConnection();
+                String[] splitted_id_penilaian = comboPenilaian.getSelectedItem().toString().split("-");
+                int id_penilaian = Integer.parseInt(splitted_id_penilaian[1]);
+                int baris = tablePerpanjangan.getSelectedRow();
+                String[] splitted_id_perpanjangan = tablePerpanjangan.getValueAt(baris, 1).toString().split("-");
+                int id_perpanjangan = Integer.parseInt(splitted_id_perpanjangan[1]);
+                PreparedStatement stmt = conn.prepareStatement("update perpanjangan set id_penilaian=?, tgl_perpanjangan=?, tgl_kerja=?, tgl_selesai=?, gaji=? where id=?");
+                stmt.setInt(1, id_penilaian);
+                stmt.setString(2, textTanggalPerpanjangan.getText());
+                stmt.setString(3, textTanggalMasukKerja.getText());
+                stmt.setString(4, textTanggalSelesai.getText());
+                stmt.setFloat(5, Float.parseFloat(textGaji.getText()));
+                stmt.setInt(6, id_perpanjangan);
+                stmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Data berhasil diupdate", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                load_table();
+                clearInput();
+                buttonSimpan.setEnabled(true);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_buttonUbahActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void buttonHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonHapusActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        if (errorInput() != null){
+            JOptionPane.showMessageDialog(null, errorInput(), "Pesan", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            try {
+                int baris = tablePerpanjangan.getSelectedRow();
+                String[] splitted_id_perpanjangan = tablePerpanjangan.getValueAt(baris, 1).toString().split("-");
+                int id = Integer.parseInt(splitted_id_perpanjangan[1]);
+                Connection conn = SistemKehadiran.getConnection();
+                int confirm = JOptionPane.showConfirmDialog(null, "Apakah anda yakin ingin menghapus data tersebut?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (confirm == 0){
+                    PreparedStatement stmt = conn.prepareStatement("delete from perpanjangan where id=?");
+                    stmt.setInt(1, id);
+                    stmt.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                    load_table();
+                    clearInput();
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e, "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_buttonHapusActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void buttonBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBatalActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        clearInput();
+        buttonSimpan.setEnabled(true);
+    }//GEN-LAST:event_buttonBatalActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void textNamaKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNamaKaryawanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_textNamaKaryawanActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void textRataRataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRataRataActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_textRataRataActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void textTanggalPerpanjanganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTanggalPerpanjanganActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_textTanggalPerpanjanganActionPerformed
 
-    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
+    private void textTanggalMasukKerjaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTanggalMasukKerjaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField8ActionPerformed
+    }//GEN-LAST:event_textTanggalMasukKerjaActionPerformed
 
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+    private void textTanggalSelesaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTanggalSelesaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9ActionPerformed
+    }//GEN-LAST:event_textTanggalSelesaiActionPerformed
 
-    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
+    private void textGajiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textGajiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField10ActionPerformed
+    }//GEN-LAST:event_textGajiActionPerformed
 
-    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
+    private void textKeteranganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textKeteranganActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField13ActionPerformed
+    }//GEN-LAST:event_textKeteranganActionPerformed
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void comboPenilaianMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboPenilaianMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_comboPenilaianMouseClicked
+
+    private void comboPenilaianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboPenilaianActionPerformed
+        // TODO add your handling code here:
+        Connection conn = SistemKehadiran.getConnection();        
+        try {
+            java.sql.Statement stmt = conn.createStatement();
+            String[] splitted_id_penilaian = comboPenilaian.getSelectedItem().toString().split("-");
+            int id = Integer.parseInt(splitted_id_penilaian[1]);
+            SQL = "select karyawan.nama, karyawan.jabatan, penilaian.rata_rata, penilaian.keterangan "
+                    + "from penilaian INNER join karyawan on penilaian.id_karyawan = karyawan.id where penilaian.id='" + id + "' ";
+
+            java.sql.ResultSet res = stmt.executeQuery(SQL);
+            while (res.next()) {
+                textNamaKaryawan.setText(res.getString(1));
+                textJabatan.setText(res.getString(2));
+                textRataRata.setText(res.getString(3));
+                textKeterangan.setText(res.getString(4).toUpperCase());
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_comboPenilaianActionPerformed
+
+    private void tablePerpanjanganMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePerpanjanganMouseClicked
+        // TODO add your handling code here:
+        buttonSimpan.setEnabled(false);
+        int baris = tablePerpanjangan.getSelectedRow();
+        comboPenilaian.setSelectedItem(tablePerpanjangan.getValueAt(baris, 2).toString());
+        textNamaKaryawan.setText(tablePerpanjangan.getValueAt(baris, 3).toString());
+        textJabatan.setText(tablePerpanjangan.getValueAt(baris, 4).toString());
+        textRataRata.setText(tablePerpanjangan.getValueAt(baris, 5).toString());
+        textKeterangan.setText(tablePerpanjangan.getValueAt(baris, 6).toString());
+        textTanggalPerpanjangan.setText(tablePerpanjangan.getValueAt(baris, 7).toString());
+        textTanggalMasukKerja.setText(tablePerpanjangan.getValueAt(baris, 8).toString());
+        textTanggalSelesai.setText(tablePerpanjangan.getValueAt(baris, 9).toString());
+        textGaji.setText(tablePerpanjangan.getValueAt(baris, 10).toString());
+    }//GEN-LAST:event_tablePerpanjanganMouseClicked
 
     /**
      * @param args the command line arguments
@@ -447,11 +675,11 @@ public class FormPerpanjangan extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton buttonBatal;
+    private javax.swing.JButton buttonHapus;
+    private javax.swing.JButton buttonSimpan;
+    private javax.swing.JButton buttonUbah;
+    private javax.swing.JComboBox<String> comboPenilaian;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -467,15 +695,15 @@ public class FormPerpanjangan extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JTable tablePerpanjangan;
+    private javax.swing.JTextField textGaji;
+    private javax.swing.JTextField textJabatan;
+    private javax.swing.JTextField textKeterangan;
+    private javax.swing.JTextField textNamaKaryawan;
+    private javax.swing.JTextField textRataRata;
+    private javax.swing.JTextField textTanggalMasukKerja;
+    private javax.swing.JTextField textTanggalPerpanjangan;
+    private javax.swing.JTextField textTanggalSelesai;
     // End of variables declaration//GEN-END:variables
 }
