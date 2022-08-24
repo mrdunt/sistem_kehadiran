@@ -142,7 +142,7 @@ public class FormPerpanjangan extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablePerpanjangan = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        textCari = new javax.swing.JTextField();
         textNamaKaryawan = new javax.swing.JTextField();
         textRataRata = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
@@ -257,11 +257,16 @@ public class FormPerpanjangan extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tablePerpanjangan);
 
-        jLabel8.setText("Cari karyawan");
+        jLabel8.setText("Cari Perpanjangan");
 
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        textCari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                textCariActionPerformed(evt);
+            }
+        });
+        textCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textCariKeyPressed(evt);
             }
         });
 
@@ -351,13 +356,13 @@ public class FormPerpanjangan extends javax.swing.JFrame {
                                 .addGap(37, 37, 37)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField4)))
+                                .addComponent(textCari)))
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel17)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
                                 .addComponent(textKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel16)
@@ -441,7 +446,7 @@ public class FormPerpanjangan extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -593,9 +598,9 @@ public class FormPerpanjangan extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_textKeteranganActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void textCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCariActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_textCariActionPerformed
 
     private void comboPenilaianMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboPenilaianMouseClicked
         // TODO add your handling code here:
@@ -638,6 +643,62 @@ public class FormPerpanjangan extends javax.swing.JFrame {
         textTanggalSelesai.setText(tablePerpanjangan.getValueAt(baris, 9).toString());
         textGaji.setText(tablePerpanjangan.getValueAt(baris, 10).toString());
     }//GEN-LAST:event_tablePerpanjanganMouseClicked
+
+    private void textCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textCariKeyPressed
+        // TODO add your handling code here:
+        if (textCari.getText().equals("")){
+            load_table();
+        }else{
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("No");
+            model.addColumn("Id Perpanjangan");
+            model.addColumn("Id Penilaian");
+            model.addColumn("Nama Karyawan");
+            model.addColumn("Jabatan");
+            model.addColumn("Rata Rata");
+            model.addColumn("Keterangan");
+            model.addColumn("Tanggal Perpanjangan");
+            model.addColumn("Tanggal Masuk Kerja");
+            model.addColumn("Tanggal Selesai");
+            model.addColumn("Gaji");
+            tablePerpanjangan.setModel(model);
+            // Disable input for Nama karyawan, Jabatan, and Text tanggal
+            textNamaKaryawan.disable();
+            textJabatan.disable();
+            textRataRata.disable();
+            textKeterangan.disable();
+            Connection conn = SistemKehadiran.getConnection();
+            //menampilkan data database kedalam tabel
+           try {
+                java.sql.Statement stmt = conn.createStatement();
+                SQL = "select perpanjangan.id, perpanjangan.id_penilaian, karyawan.nama, karyawan.jabatan, penilaian.rata_rata, penilaian.keterangan, "
+                        + "perpanjangan.tgl_perpanjangan, perpanjangan.tgl_kerja, perpanjangan.tgl_selesai, perpanjangan.gaji "
+                        + "from perpanjangan INNER join penilaian on perpanjangan.id_penilaian = penilaian.id INNER join karyawan on penilaian.id_karyawan = karyawan.id "
+                        + "where karyawan.nama like '%" + textCari.getText() + "%' or karyawan.jabatan like '%" + textCari.getText()+ "%' or penilaian.rata_rata like '%" + textCari.getText()+ "%' "
+                        + "or penilaian.keterangan like '%" + textCari.getText()+ "%' or perpanjangan.tgl_kerja like '%" + textCari.getText()+ "%' or perpanjangan.tgl_perpanjangan like '%" + textCari.getText()+ "%'"
+                        + "or perpanjangan.tgl_selesai like '%" + textCari.getText()+ "%' or perpanjangan.gaji like '%" + textCari.getText()+ "%' ";
+                java.sql.ResultSet res = stmt.executeQuery(SQL);
+                int no=1;
+                while (res.next()) {
+                    model.addRow(new Object[]{
+                        no++,
+                        "PRPJ-" + res.getString(1),
+                        "PEN-" + res.getString(2),
+                        res.getString(3),
+                        res.getString(4),
+                        res.getString(5),
+                        res.getString(6),
+                        res.getString(7),
+                        res.getString(8),
+                        res.getString(9),
+                        res.getString(10),
+                    });
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_textCariKeyPressed
 
     /**
      * @param args the command line arguments
@@ -695,8 +756,8 @@ public class FormPerpanjangan extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTable tablePerpanjangan;
+    private javax.swing.JTextField textCari;
     private javax.swing.JTextField textGaji;
     private javax.swing.JTextField textJabatan;
     private javax.swing.JTextField textKeterangan;

@@ -129,7 +129,7 @@ public class FormKehadiran extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tableKehadiran = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        textCari = new javax.swing.JTextField();
         textTanggal = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         comboKeterangan = new javax.swing.JComboBox<>();
@@ -210,7 +210,13 @@ public class FormKehadiran extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tableKehadiran);
 
-        jLabel8.setText("Cari Tanggal Kehadiran");
+        jLabel8.setText("Cari Kehadiran");
+
+        textCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textCariKeyPressed(evt);
+            }
+        });
 
         textTanggal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,7 +286,7 @@ public class FormKehadiran extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(136, 136, 136)
                                 .addComponent(buttonSimpan)
@@ -290,7 +296,7 @@ public class FormKehadiran extends javax.swing.JFrame {
                                 .addComponent(jButton3)
                                 .addGap(18, 18, 18)
                                 .addComponent(buttonBatal)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 209, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -340,7 +346,7 @@ public class FormKehadiran extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -487,6 +493,58 @@ public class FormKehadiran extends javax.swing.JFrame {
         comboKeterangan.setSelectedItem(tableKehadiran.getValueAt(baris, 6).toString());
     }//GEN-LAST:event_tableKehadiranMouseClicked
 
+    private void textCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textCariKeyPressed
+        // TODO add your handling code here:
+        if (textCari.getText().equals("")){
+            load_table();
+        }else{
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("No");
+            model.addColumn("Id Kehadiran");
+            model.addColumn("Id Karyawan");
+            model.addColumn("Nama Karyawan");
+            model.addColumn("Jabatan");
+            model.addColumn("Tanggal Kehadiran");
+            model.addColumn("Keterangan");
+            tableKehadiran.setModel(model);
+            // Disable input for Nama karyawan, Jabatan, and Text tanggal
+            textNamaKaryawan.disable();
+            textJabatan.disable();
+            textTanggal.disable();
+            // Set text tanggal to auto date now
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date();
+            textTanggal.setText(dateFormat.format(date));
+
+            Connection conn = SistemKehadiran.getConnection();
+
+            //menampilkan data database kedalam tabel
+           try {
+                java.sql.Statement stmt = conn.createStatement();
+                SQL = "SELECT kehadiran.id, kehadiran.id_karyawan, karyawan.nama, "
+                        + "karyawan.jabatan, kehadiran.tgl_kehadiran, "
+                        + "kehadiran.keterangan from kehadiran "
+                        + "inner join karyawan on karyawan.id = kehadiran.id_karyawan where karyawan.nama like '%" + textCari.getText() + "%' or karyawan.jabatan like '%" + textCari.getText()+ "%'"
+                        + "or kehadiran.tgl_kehadiran like '%" + textCari.getText()+ "%' or kehadiran.keterangan like '%" + textCari.getText()+ "%' ;";
+                java.sql.ResultSet res = stmt.executeQuery(SQL);
+                int no=1;
+                while (res.next()) {
+                    model.addRow(new Object[]{
+                        no++,
+                        "HDR-" + res.getString(1),
+                        "KAR-" + res.getString(2),
+                        res.getString(3),
+                        res.getString(4),
+                        res.getString(5),
+                        res.getString(6)
+                    });
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_textCariKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -540,8 +598,8 @@ public class FormKehadiran extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTable tableKehadiran;
+    private javax.swing.JTextField textCari;
     private javax.swing.JTextField textJabatan;
     private javax.swing.JTextField textNamaKaryawan;
     private javax.swing.JTextField textTanggal;

@@ -167,7 +167,7 @@ public class FormPenilaian extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablePenilaian = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        textCari = new javax.swing.JTextField();
         textTanggalKehadiran = new javax.swing.JTextField();
         textJabatan = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
@@ -263,7 +263,13 @@ public class FormPenilaian extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tablePenilaian);
 
-        jLabel8.setText("Cari karyawan");
+        jLabel8.setText("Cari Penilaian");
+
+        textCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textCariKeyPressed(evt);
+            }
+        });
 
         textTanggalKehadiran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -395,56 +401,60 @@ public class FormPenilaian extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(buttonSimpan)
-                                .addGap(18, 18, 18)
-                                .addComponent(buttonUbah)
-                                .addGap(18, 18, 18)
-                                .addComponent(buttonHapus)
-                                .addGap(18, 18, 18)
-                                .addComponent(buttonBatal)
-                                .addGap(83, 83, 83)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel8)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(buttonSimpan)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(buttonUbah)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(buttonHapus)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(buttonBatal))
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel2))
-                                        .addGap(39, 39, 39)
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel5)
+                                                    .addComponent(jLabel3)
+                                                    .addComponent(jLabel2))
+                                                .addGap(39, 39, 39)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(textTanggalKehadiran, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                                                    .addComponent(textNamaKaryawan, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                                                    .addComponent(textJabatan, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                                                    .addComponent(comboKehadiran, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(comboKaryawan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addComponent(jLabel6))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(textTanggalKehadiran, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                                            .addComponent(textNamaKaryawan, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                                            .addComponent(textJabatan, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                                            .addComponent(comboKehadiran, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(comboKaryawan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                    .addComponent(jLabel6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel11)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(textKemampuanKerja, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel12)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(textLoyalitas, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(textDisiplin, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel14)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(textPrestasi, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel11)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(textKemampuanKerja, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel12)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(textLoyalitas, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel13)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(textDisiplin, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel14)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(textPrestasi, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGap(156, 156, 156)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -524,17 +534,17 @@ public class FormPenilaian extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(textJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel8)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(buttonSimpan)
-                        .addComponent(buttonUbah)
-                        .addComponent(buttonHapus)
-                        .addComponent(buttonBatal)))
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonSimpan)
+                    .addComponent(buttonUbah)
+                    .addComponent(buttonHapus)
+                    .addComponent(buttonBatal))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -769,6 +779,68 @@ public class FormPenilaian extends javax.swing.JFrame {
 
     }//GEN-LAST:event_tablePenilaianMouseClicked
 
+    private void textCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textCariKeyPressed
+        // TODO add your handling code here:
+        if (textCari.getText().equals("")){
+            load_table();
+        }else{
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("No");
+            model.addColumn("Id Penilaian");
+            model.addColumn("Id Karyawan");
+            model.addColumn("Nama Karyawan");
+            model.addColumn("Jabatan");
+            model.addColumn("Id Kehadiran");
+            model.addColumn("Tanggal Kehadiran");
+            model.addColumn("Kemampuan Kerja");
+            model.addColumn("Loyalitas");
+            model.addColumn("Disiplin");
+            model.addColumn("Prestasi");
+            model.addColumn("Perilaku");
+            model.addColumn("Rata-Rata");
+            model.addColumn("Keterangan");
+            tablePenilaian.setModel(model);
+            // Disable input for Nama karyawan, Jabatan, and Text tanggal
+            textNamaKaryawan.disable();
+            textJabatan.disable();
+            textTanggalKehadiran.disable();
+            textRata.disable();
+            textKeterangan.disable();
+            Connection conn = SistemKehadiran.getConnection();
+            //menampilkan data database kedalam tabel
+           try {
+                java.sql.Statement stmt = conn.createStatement();
+                SQL = "select penilaian.id, penilaian.id_karyawan, karyawan.nama, karyawan.jabatan, penilaian.id_kehadiran, kehadiran.tgl_kehadiran, "
+                        + "penilaian.kemampuan, penilaian.loyalitas, penilaian.disiplin, penilaian.prestasi, penilaian.perilaku, penilaian.rata_rata, "
+                        + "penilaian.keterangan from penilaian INNER join karyawan on penilaian.id_karyawan = karyawan.id INNER JOIN kehadiran on penilaian.id_kehadiran = kehadiran.id "
+                        + "where karyawan.nama like '%" + textCari.getText() + "%' or karyawan.jabatan like '%" + textCari.getText()+ "%' or kehadiran.tgl_kehadiran like '%" + textCari.getText()+ "%' "
+                        + "or penilaian.rata_rata like '%" + textCari.getText()+ "%' or penilaian.keterangan like '%" + textCari.getText()+ "%' ";
+                java.sql.ResultSet res = stmt.executeQuery(SQL);
+                int no=1;
+                while (res.next()) {
+                    model.addRow(new Object[]{
+                        no++,
+                        "PEN-" + res.getString(1),
+                        "KAR-" + res.getString(2),
+                        res.getString(3),
+                        res.getString(4),
+                        "HDR-" + res.getString(5),
+                        res.getString(6),
+                        res.getString(7),
+                        res.getString(8),
+                        res.getString(9),
+                        res.getString(10),
+                        res.getString(11),
+                        res.getString(12),
+                        res.getString(13).toUpperCase(),
+                    });
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_textCariKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -830,8 +902,8 @@ public class FormPenilaian extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTable tablePenilaian;
+    private javax.swing.JTextField textCari;
     private javax.swing.JTextField textDisiplin;
     private javax.swing.JTextField textJabatan;
     private javax.swing.JTextField textKemampuanKerja;

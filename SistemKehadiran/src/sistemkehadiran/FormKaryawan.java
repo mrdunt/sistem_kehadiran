@@ -105,7 +105,7 @@ public class FormKaryawan extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tableKaryawan = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        textCari = new javax.swing.JTextField();
         buttonSimpan = new javax.swing.JButton();
         buttonUbah = new javax.swing.JButton();
         buttonHapus = new javax.swing.JButton();
@@ -201,6 +201,12 @@ public class FormKaryawan extends javax.swing.JFrame {
 
         jLabel8.setText("Cari karyawan");
 
+        textCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textCariKeyPressed(evt);
+            }
+        });
+
         buttonSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/plus.png"))); // NOI18N
         buttonSimpan.setText("Simpan");
         buttonSimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -254,7 +260,7 @@ public class FormKaryawan extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(174, 174, 174)
                                 .addComponent(buttonSimpan)
@@ -320,7 +326,7 @@ public class FormKaryawan extends javax.swing.JFrame {
                 .addGap(2, 2, 2)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -456,6 +462,48 @@ public class FormKaryawan extends javax.swing.JFrame {
         textAlamat.setText(tableKaryawan.getValueAt(baris, 6).toString());
     }//GEN-LAST:event_tableKaryawanMouseClicked
 
+    private void textCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textCariKeyPressed
+        // TODO add your handling code here:
+       if(textCari.getText().equals("")){
+           load_table();
+       }else{
+           DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("No");
+            model.addColumn("Id Karyawan");
+            model.addColumn("Nama");
+            model.addColumn("Jenis Kelamin");
+            model.addColumn("Jabatan");
+            model.addColumn("Phone");
+            model.addColumn("Alamat");
+            tableKaryawan.setModel(model);
+
+
+            Connection conn = SistemKehadiran.getConnection();
+
+            //menampilkan data database kedalam tabel
+           try {
+                java.sql.Statement stmt = conn.createStatement();
+                SQL = "select * from karyawan where nama like '%" + textCari.getText() + "%' or jabatan like '%" + textCari.getText()+ "%' "
+                        + "or jenis_kelamin like '%" + textCari.getText()+ "%' or alamat like '%" + textCari.getText()+ "%' or no_telp like '%" + textCari.getText()+ "%' " ;
+                java.sql.ResultSet res = stmt.executeQuery(SQL);
+                int no=1;
+                while (res.next()) {
+                    model.addRow(new Object[]{
+                        no++,
+                        "KAR-"+res.getString("id"),
+                        res.getString("nama"),
+                        res.getString("jenis_kelamin"),
+                        res.getString("jabatan"),
+                        res.getString("no_telp"),
+                        res.getString("alamat")
+                    });
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+       }
+    }//GEN-LAST:event_textCariKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -510,9 +558,9 @@ public class FormKaryawan extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTable tableKaryawan;
     private javax.swing.JTextArea textAlamat;
+    private javax.swing.JTextField textCari;
     private javax.swing.JTextField textNama;
     private javax.swing.JTextField textNoTelp;
     // End of variables declaration//GEN-END:variables
