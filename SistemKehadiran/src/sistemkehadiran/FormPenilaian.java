@@ -196,6 +196,7 @@ public class FormPenilaian extends javax.swing.JFrame {
         comboKehadiran = new javax.swing.JComboBox<>();
         comboKaryawan = new javax.swing.JComboBox<>();
         buttonUnduh = new javax.swing.JButton();
+        buttonReward = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -403,6 +404,14 @@ public class FormPenilaian extends javax.swing.JFrame {
             }
         });
 
+        buttonReward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/ranking.png"))); // NOI18N
+        buttonReward.setText("3 Karyawan Terbaik");
+        buttonReward.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRewardActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -411,24 +420,12 @@ public class FormPenilaian extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
-                        .addContainerGap())
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(buttonSimpan)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(buttonUbah)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(buttonHapus)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(buttonBatal))
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -461,7 +458,16 @@ public class FormPenilaian extends javax.swing.JFrame {
                                             .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addComponent(jLabel14)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(textPrestasi, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                                .addComponent(textPrestasi, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(buttonSimpan)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(buttonUbah)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(buttonHapus)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(buttonBatal)))
                                 .addGap(18, 18, 18)
                                 .addComponent(buttonUnduh)
                                 .addGap(47, 47, 47)))
@@ -484,13 +490,17 @@ public class FormPenilaian extends javax.swing.JFrame {
                                 .addComponent(jLabel17)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(textKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                                .addContainerGap())))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(buttonReward)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -557,11 +567,16 @@ public class FormPenilaian extends javax.swing.JFrame {
                     .addComponent(buttonBatal)
                     .addComponent(buttonUnduh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
+                        .addGap(38, 38, 38))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(buttonReward, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -738,6 +753,7 @@ public class FormPenilaian extends javax.swing.JFrame {
         // TODO add your handling code here:
         clearInput();
         buttonSimpan.setEnabled(true);
+        load_table();
     }//GEN-LAST:event_buttonBatalActionPerformed
 
     private void comboKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboKaryawanActionPerformed
@@ -886,6 +902,63 @@ public class FormPenilaian extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_buttonUnduhActionPerformed
 
+    private void buttonRewardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRewardActionPerformed
+        // TODO add your handling code here:
+         DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("Id Penilaian");
+        model.addColumn("Id Karyawan");
+        model.addColumn("Nama Karyawan");
+        model.addColumn("Jabatan");
+        model.addColumn("Id Kehadiran");
+        model.addColumn("Tanggal Kehadiran");
+        model.addColumn("Kemampuan Kerja");
+        model.addColumn("Loyalitas");
+        model.addColumn("Disiplin");
+        model.addColumn("Prestasi");
+        model.addColumn("Perilaku");
+        model.addColumn("Rata-Rata");
+        model.addColumn("Keterangan");
+        tablePenilaian.setModel(model);
+        // Disable input for Nama karyawan, Jabatan, and Text tanggal
+        textNamaKaryawan.disable();
+        textJabatan.disable();
+        textTanggalKehadiran.disable();
+        textRata.disable();
+        textKeterangan.disable();
+        Connection conn = SistemKehadiran.getConnection();
+        //menampilkan data database kedalam tabel
+       try {
+            java.sql.Statement stmt = conn.createStatement();
+            SQL = "select penilaian.id, penilaian.id_karyawan, karyawan.nama, karyawan.jabatan, penilaian.id_kehadiran, kehadiran.tgl_kehadiran, "
+                    + "penilaian.kemampuan, penilaian.loyalitas, penilaian.disiplin, penilaian.prestasi, penilaian.perilaku, penilaian.rata_rata, "
+                    + "penilaian.keterangan from penilaian INNER join karyawan on penilaian.id_karyawan = karyawan.id INNER JOIN kehadiran on penilaian.id_kehadiran = kehadiran.id "
+                    + "group by karyawan.nama order by penilaian.rata_rata desc limit 3 ;";
+            java.sql.ResultSet res = stmt.executeQuery(SQL);
+            int no=1;
+            while (res.next()) {
+                model.addRow(new Object[]{
+                    no++,
+                    "PEN-" + res.getString(1),
+                    "KAR-" + res.getString(2),
+                    res.getString(3),
+                    res.getString(4),
+                    "HDR-" + res.getString(5),
+                    res.getString(6),
+                    res.getString(7),
+                    res.getString(8),
+                    res.getString(9),
+                    res.getString(10),
+                    res.getString(11),
+                    res.getString(12),
+                    res.getString(13).toUpperCase(),
+                });
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_buttonRewardActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -925,6 +998,7 @@ public class FormPenilaian extends javax.swing.JFrame {
     private javax.swing.JButton buttonBatal;
     private javax.swing.JButton buttonHapus;
     private javax.swing.JButton buttonHitung;
+    private javax.swing.JButton buttonReward;
     private javax.swing.JButton buttonSimpan;
     private javax.swing.JButton buttonUbah;
     private javax.swing.JButton buttonUnduh;
