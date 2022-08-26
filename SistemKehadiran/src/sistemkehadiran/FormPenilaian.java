@@ -4,14 +4,18 @@
  */
 package sistemkehadiran;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -191,6 +195,7 @@ public class FormPenilaian extends javax.swing.JFrame {
         buttonBatal = new javax.swing.JButton();
         comboKehadiran = new javax.swing.JComboBox<>();
         comboKaryawan = new javax.swing.JComboBox<>();
+        buttonUnduh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -211,9 +216,9 @@ public class FormPenilaian extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(193, 193, 193))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -390,6 +395,14 @@ public class FormPenilaian extends javax.swing.JFrame {
             }
         });
 
+        buttonUnduh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/download.png"))); // NOI18N
+        buttonUnduh.setText("Unduh");
+        buttonUnduh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonUnduhActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -398,13 +411,7 @@ public class FormPenilaian extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane2)
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -437,7 +444,7 @@ public class FormPenilaian extends javax.swing.JFrame {
                                                     .addComponent(comboKehadiran, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                     .addComponent(comboKaryawan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                             .addComponent(jLabel6))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addComponent(jLabel11)
@@ -455,7 +462,9 @@ public class FormPenilaian extends javax.swing.JFrame {
                                                 .addComponent(jLabel14)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(textPrestasi, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                .addGap(156, 156, 156)))
+                                .addGap(18, 18, 18)
+                                .addComponent(buttonUnduh)
+                                .addGap(47, 47, 47)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -476,6 +485,12 @@ public class FormPenilaian extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(textKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -539,8 +554,9 @@ public class FormPenilaian extends javax.swing.JFrame {
                     .addComponent(buttonSimpan)
                     .addComponent(buttonUbah)
                     .addComponent(buttonHapus)
-                    .addComponent(buttonBatal))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonBatal)
+                    .addComponent(buttonUnduh))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
@@ -841,6 +857,35 @@ public class FormPenilaian extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_textCariKeyPressed
 
+    private void buttonUnduhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUnduhActionPerformed
+        // TODO add your handling code here:
+        FileWriter fileWriter;
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("[B]export_output/excel[/B]"));
+        int retrival = chooser.showSaveDialog(null);
+        if (retrival == JFileChooser.APPROVE_OPTION) {
+            try{
+                TableModel tModel = tablePenilaian.getModel();
+                fileWriter = new FileWriter(new File(chooser.getSelectedFile() + ".xls"));           
+            // write header
+                for(int i = 0; i < tModel.getColumnCount(); i++){
+                fileWriter.write(tModel.getColumnName(i).toUpperCase() + "\t");
+            }
+                fileWriter.write("\n");
+            // write record
+                for(int i=0; i < tModel.getRowCount(); i++) {
+                for(int j=0; j < tModel.getColumnCount(); j++) {
+                fileWriter.write(tModel.getValueAt(i,j).toString() + "\t");
+            }
+                fileWriter.write("\n");
+            }
+                fileWriter.close();
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }//GEN-LAST:event_buttonUnduhActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -882,6 +927,7 @@ public class FormPenilaian extends javax.swing.JFrame {
     private javax.swing.JButton buttonHitung;
     private javax.swing.JButton buttonSimpan;
     private javax.swing.JButton buttonUbah;
+    private javax.swing.JButton buttonUnduh;
     private javax.swing.JComboBox<String> comboKaryawan;
     private javax.swing.JComboBox<String> comboKehadiran;
     private javax.swing.JLabel jLabel1;

@@ -3,11 +3,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package sistemkehadiran;
+import java.io.File;
 import javax.swing.table.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import javax.swing.JFileChooser;
+import javax.swing.JTable;
 /**
  *
  * @author itsupport
@@ -74,6 +81,42 @@ public class FormKaryawan extends javax.swing.JFrame {
         return null;
     }
     
+    static void exportToExcel(JTable table, String filePath) throws Exception {
+        TableModel model = table.getModel();
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet();
+        Row row;
+        Cell cell;
+
+        // write the column headers
+        row = sheet.createRow(0);
+        for (int c = 0; c < model.getColumnCount(); c++) {
+         cell = row.createCell(c);
+         cell.setCellValue(model.getColumnName(c));
+        }
+
+        // write the data rows
+        for (int r = 0; r < model.getRowCount(); r++) {
+         row = sheet.createRow(r+1);
+         for (int c = 0; c < model.getColumnCount(); c++) {
+          cell = row.createCell(c);
+          Object value = model.getValueAt(r, c);
+          if (value instanceof String) {
+           cell.setCellValue((String)value);
+          } else if (value instanceof Double) {
+           cell.setCellValue((Double)value);
+          }
+         }
+        }
+
+        FileOutputStream out = new FileOutputStream(filePath);
+        workbook.write(out);
+        out.close();
+        workbook.close();
+
+    }
+    
+    
     public FormKaryawan() {
         initComponents();
         this.load_table();
@@ -111,6 +154,7 @@ public class FormKaryawan extends javax.swing.JFrame {
         buttonHapus = new javax.swing.JButton();
         buttonBatal = new javax.swing.JButton();
         comboJenisKelamin = new javax.swing.JComboBox<>();
+        buttonUnduh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -118,6 +162,7 @@ public class FormKaryawan extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Data Karyawan");
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/employee.png"))); // NOI18N
@@ -129,9 +174,9 @@ public class FormKaryawan extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(76, 76, 76)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(254, Short.MAX_VALUE))
+                .addContainerGap(184, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,6 +291,14 @@ public class FormKaryawan extends javax.swing.JFrame {
             }
         });
 
+        buttonUnduh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sistemkehadiran/download.png"))); // NOI18N
+        buttonUnduh.setText("Unduh");
+        buttonUnduh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonUnduhActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -260,17 +313,7 @@ public class FormKaryawan extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(174, 174, 174)
-                                .addComponent(buttonSimpan)
-                                .addGap(18, 18, 18)
-                                .addComponent(buttonUbah)
-                                .addGap(18, 18, 18)
-                                .addComponent(buttonHapus)
-                                .addGap(18, 18, 18)
-                                .addComponent(buttonBatal)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,7 +325,7 @@ public class FormKaryawan extends javax.swing.JFrame {
                             .addComponent(textNama, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboJenisKelamin, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(jLabel7))
@@ -291,6 +334,18 @@ public class FormKaryawan extends javax.swing.JFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(textNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(60, 60, 60))))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(132, 132, 132)
+                .addComponent(buttonSimpan)
+                .addGap(18, 18, 18)
+                .addComponent(buttonUbah)
+                .addGap(18, 18, 18)
+                .addComponent(buttonHapus)
+                .addGap(18, 18, 18)
+                .addComponent(buttonBatal)
+                .addGap(18, 18, 18)
+                .addComponent(buttonUnduh, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,13 +372,14 @@ public class FormKaryawan extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(26, 26, 26)
+                .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonSimpan)
                     .addComponent(buttonUbah)
                     .addComponent(buttonHapus)
-                    .addComponent(buttonBatal))
-                .addGap(2, 2, 2)
+                    .addComponent(buttonBatal)
+                    .addComponent(buttonUnduh))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -504,6 +560,35 @@ public class FormKaryawan extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_textCariKeyPressed
 
+    private void buttonUnduhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUnduhActionPerformed
+        // TODO add your handling code here:
+        FileWriter fileWriter;
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("[B]export_output/excel[/B]"));
+        int retrival = chooser.showSaveDialog(null);
+        if (retrival == JFileChooser.APPROVE_OPTION) {
+            try{
+                TableModel tModel = tableKaryawan.getModel();
+                fileWriter = new FileWriter(new File(chooser.getSelectedFile() + ".xls"));           
+            // write header
+                for(int i = 0; i < tModel.getColumnCount(); i++){
+                fileWriter.write(tModel.getColumnName(i).toUpperCase() + "\t");
+            }
+                fileWriter.write("\n");
+            // write record
+                for(int i=0; i < tModel.getRowCount(); i++) {
+                for(int j=0; j < tModel.getColumnCount(); j++) {
+                fileWriter.write(tModel.getValueAt(i,j).toString() + "\t");
+            }
+                fileWriter.write("\n");
+            }
+                fileWriter.close();
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }//GEN-LAST:event_buttonUnduhActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -544,6 +629,7 @@ public class FormKaryawan extends javax.swing.JFrame {
     private javax.swing.JButton buttonHapus;
     private javax.swing.JButton buttonSimpan;
     private javax.swing.JButton buttonUbah;
+    private javax.swing.JButton buttonUnduh;
     private javax.swing.JComboBox<String> comboJabatan;
     private javax.swing.JComboBox<String> comboJenisKelamin;
     private javax.swing.JLabel jLabel1;
